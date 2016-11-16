@@ -12,6 +12,7 @@
 <%-- //[END imports]--%>
 
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Arrays" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -57,8 +58,14 @@
           .type(Greeting.class) // We want only Greetings
           .ancestor(theBook)    // Anyone in this book
           .order("-date")       // Most recent first - date is indexed.
-          .limit(5)             // Only show 5 of them.
+          //.limit(5)             // Only show 5 of them.
           .list();
+          
+    for (int i = 5; i < greetings.size(); i++) {
+    	ObjectifyService.ofy().delete().entity(greetings.get(i)).now();
+    	greetings.remove(i);
+    }
+	//greetings.sublist(5, greetings.size()).clear();
 
     if (greetings.isEmpty()) {
 %>
